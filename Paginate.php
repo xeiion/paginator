@@ -133,7 +133,8 @@ class Paginate {
     }
 
     public function Result() {
-        $amount = $this->CurrentPage * $this->maxPage;
+        $amount = $this->maxPage * ($this->CurrentPage - 1);
+
         $query = $this->query . ' LIMIT ' . $amount . ',' . $this->maxPage;
         $result = $this->connection->query($query);
 
