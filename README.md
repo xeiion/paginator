@@ -12,3 +12,5 @@ $paginate->setCurrentPage('1);
 $paginate->setMaxPage('1');
 
 echo $paginate->GenerateNavi();
+
+$paginate->Result();
