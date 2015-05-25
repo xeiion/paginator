@@ -19,6 +19,7 @@ class Paginate {
     private $LinkRange = 5;
     private $Class;
     private $dbcount;
+    private $query;
 
     public function __construct($db) {
         $this->connection = $db;
@@ -41,8 +42,8 @@ class Paginate {
     }
 
     public function query($Dbquery) {
-        $query = "$Dbquery";
-        $Rowreturn = $this->connection->query($query);
+        $this->query = $Dbquery;
+        $Rowreturn = $this->connection->query($this->query);
         if (!$Rowreturn) {
             throw new exception('Query is not valid');
         } else {
@@ -121,8 +122,7 @@ class Paginate {
         }
     }
 
-    public function GenerateUl() {
-
+    public function GenerateNavi() {
         $ul = "<ul $this->Class>";
         $ul .= $this->BackWardLink();
         $ul .= $this->GenerateLi();
@@ -133,7 +133,17 @@ class Paginate {
     }
 
     public function Result() {
-        
+        $amount = $this->CurrentPage * $this->maxPage;
+        $query = $this->query . ' LIMIT ' . $amount . ',' . $this->maxPage;
+        $result = $this->connection->query($query);
+
+        $items = array();
+
+        while ($row = $result->fetch_array()) {
+            $items[] = $row;
+        }
+
+        return $items;
     }
 
 }
